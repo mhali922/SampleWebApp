@@ -1,0 +1,18 @@
+- hosts: webserver
+  become: true
+  become_user: root
+  tasks:
+  - name: Install Git tomcat and Docker
+    yum: name={{item}} state=present
+    with_items:
+    - docker
+    - git
+	- tomcat
+  - name: Start Docker
+    service: name=docker state=started
+  - name: clone git repo
+    git: repo=https://github.com/mhali922/SampleWebApp.git dest=/tmp/applications
+  - name: build dockerfile
+    command: chdir=/tmp/applications docker build -t myimage:v1 .
+  - name: Run the image to deploy the application
+    command: docker run -itd -P myimage:v1
