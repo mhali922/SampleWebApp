@@ -7,7 +7,6 @@
     with_items:
     - docker
     - git
-	- tomcat
   - name: Start Docker
     service: name=docker state=started
   - name: clone git repo
